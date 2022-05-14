@@ -1,34 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-import { InputLabel, Select, FormControl, Container, Typography, Grid, TextField, CssBaseline } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { InputLabel, Select, FormControl, Container, Typography, Grid, TextField, CssBaseline } from '@mui/material';
+// import { makeStyles } from '@mui/material/styles';
 import { apiUrl } from '../../../apiUrl';
 
 const baseUrl = apiUrl + 'register/';
 
-const useStyles = makeStyles(theme => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: '15px auto',
-    justify: 'center'
-  },
-}));
+// const useStyles = makeStyles(theme => ({
+//   paper: {
+//     marginTop: theme.spacing(8),
+//     display: 'flex',
+//     flexDirection: 'column',
+//     alignItems: 'center',
+//   },
+//   avatar: {
+//     margin: theme.spacing(1),
+//     backgroundColor: theme.palette.secondary.main,
+//   },
+//   form: {
+//     width: '100%', // Fix IE 11 issue.
+//     marginTop: theme.spacing(3),
+//   },
+//   submit: {
+//     margin: '15px auto',
+//     justify: 'center'
+//   },
+// }));
 
 const idInfo = {
-  endpoint: '',
   name: '',
   father_lname: '',
   mother_lname: '',
@@ -38,7 +36,7 @@ const idInfo = {
 }
 
 export default function IdCard(props) {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   const [inputs, setInputs] = useState(idInfo);
   const inputLabel = useRef(null);
@@ -48,21 +46,38 @@ export default function IdCard(props) {
   }, []);
 
   useEffect(() => {
-    axios.get(baseUrl + props.userId).then(response => {
-      const userData = Object.assign({}, response.data.user);
-      delete userData['email'];
-      delete userData['id'];
-      userData['endpoint'] = '';
-      if (userData.birthdate) {
-        userData.birthdate = userData.birthdate.slice(0,10);
-      }
-
-      setInputs(userData);
-    });
+    if (props.userData.birthdate) {
+      props.userData.birthdate = props.userData.birthdate.slice(0,10);
+    }
+    if (props.userData.exam_date) {
+      props.userData.exam_date = props.userData.exam_date.slice(0,10);
+    }
+    if (props.userData.finish_date_internship) {
+      props.userData.finish_date_internship = props.userData.finish_date_internship.slice(0,10);
+    }
+    if (props.userData.finish_date_school) {
+      props.userData.finish_date_school = props.userData.finish_date_school.slice(0,10);
+    }
+    if (props.userData.finish_date_social) {
+      props.userData.finish_date_social = props.userData.finish_date_social.slice(0,10);
+    }
+    if (props.userData.start_date_internship) {
+      props.userData.start_date_internship = props.userData.start_date_internship.slice(0,10);
+    }
+    if (props.userData.start_date_school) {
+      props.userData.start_date_school = props.userData.start_date_school.slice(0,10);
+    }
+    if (props.userData.start_date_social) {
+      props.userData.start_date_social = props.userData.start_date_social.slice(0,10);
+    }
+    if (props.userData.professional_id_date) {
+      props.userData.professional_id_date = props.userData.professional_id_date.slice(0,10);
+    }
+    setInputs(props.userData);
   }, [props.userId]);
 
   useEffect(() => {
-    props.handleUpdate(inputs);
+    props.handleUpdate(inputs, 1);
   }, [inputs]);
 
   function handleChange(e) {
@@ -74,11 +89,11 @@ export default function IdCard(props) {
   return (
     <Container component="main" maxWidth="xs">
       {<CssBaseline />}
-      <div className={classes.paper}>
+      <div>
         <Typography component="h1" variant="h5">
           Ficha de identificación
         </Typography>
-        <form className={classes.form} noValidate onChange={handleChange}>
+        <form noValidate onChange={handleChange}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -128,7 +143,7 @@ export default function IdCard(props) {
               />
             </Grid>
             <Grid item xs={12}>
-              <FormControl fullWidth variant="outlined" className={classes.formControl}>
+              <FormControl fullWidth variant="outlined" >
                 <InputLabel ref={inputLabel} htmlFor="standard-age-native-simple" >
                   Estado de Nacimiento
                 </InputLabel>

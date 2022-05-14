@@ -1,33 +1,32 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import { Select, FormControl, InputLabel, Container, Typography, Grid, TextField, CssBaseline } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Select, FormControl, InputLabel, Container, Typography, Grid, TextField, CssBaseline } from '@mui/material';
+// import { makeStyles } from '@material-ui/core/styles';
 import { apiUrl } from '../../../apiUrl';
 
 const baseUrl = apiUrl + 'register/';
 
-const useStyles = makeStyles(theme => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+// const useStyles = makeStyles(theme => ({
+//   paper: {
+//     marginTop: theme.spacing(8),
+//     display: 'flex',
+//     flexDirection: 'column',
+//     alignItems: 'center',
+//   },
+//   avatar: {
+//     margin: theme.spacing(1),
+//     backgroundColor: theme.palette.secondary.main,
+//   },
+//   form: {
+//     width: '100%', // Fix IE 11 issue.
+//     marginTop: theme.spacing(3),
+//   },
+//   submit: {
+//     margin: theme.spacing(3, 0, 2),
+//   },
+// }));
 
 const addressInfo = {
-  endpoint: '/address',
   street: '',
   number: '',
   town: '',
@@ -38,7 +37,7 @@ const addressInfo = {
 }
 
 export default function ParticularAddress(props) {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   const [inputs, setInputs] = useState(addressInfo);
   const inputLabel = useRef(null);
@@ -48,20 +47,13 @@ export default function ParticularAddress(props) {
   }, []);
 
   useEffect(() => {
-    axios.get(baseUrl + props.userId + '/address').then(response => {
-      const addressData = Object.assign({}, response.data.address);
-      delete addressData['id'];
-      delete addressData['Users_id'];
-      addressData['endpoint'] = '/address';
-
-      ['street', 'number', 'town', 'city', 'state', 'zip_code', 'phone'].forEach(att => {
-        if (!addressData.hasOwnProperty(att)) {
-          addressData[att] = '';
-        }
-      });
-
-      setInputs(addressData);
-    });
+    // console.log(props.userData)
+    // ['street', 'number', 'town', 'city', 'state', 'zip_code', 'phone'].forEach(att => {
+    //       if (!props.userData.hasOwnProperty(att)) {
+    //         props.userData[att] = '';
+    //       }
+    //     });
+    setInputs(props.userData);
   }, [props.userId]);
 
   useEffect(() => {
@@ -77,11 +69,11 @@ export default function ParticularAddress(props) {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
+      <div >
         <Typography component="h1" variant="h5">
           Domicilio particular
         </Typography>
-        <form className={classes.form} noValidate onChange={handleChange}>
+        <form noValidate onChange={handleChange}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={8}>
               <TextField
@@ -129,7 +121,7 @@ export default function ParticularAddress(props) {
               />
             </Grid>
             <Grid item xs={12}>
-              <FormControl fullWidth variant="outlined" className={classes.formControl}>
+              <FormControl fullWidth variant="outlined">
                 <InputLabel ref={inputLabel} htmlFor="outlined-age-native-simple">
                   Estado
                 </InputLabel>

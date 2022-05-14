@@ -1,37 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Typography, Grid, TextField, CssBaseline } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Container, Typography, Grid, TextField, CssBaseline } from '@mui/material';
+// import { makeStyles } from '@material-ui/core/styles';
 import { apiUrl } from '../../../apiUrl';
 
 const baseUrl = apiUrl + 'register/';
 
-const useStyles = makeStyles(theme => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+// const useStyles = makeStyles(theme => ({
+//   paper: {
+//     marginTop: theme.spacing(8),
+//     display: 'flex',
+//     flexDirection: 'column',
+//     alignItems: 'center',
+//   },
+//   avatar: {
+//     margin: theme.spacing(1),
+//     backgroundColor: theme.palette.secondary.main,
+//   },
+//   form: {
+//     width: '100%', // Fix IE 11 issue.
+//     marginTop: theme.spacing(3),
+//   },
+//   submit: {
+//     margin: theme.spacing(3, 0, 2),
+//   },
+// }));
 
 const professionalInfo = {
   endpoint: '/professional',
   school: '',
-  start_date: '',
-  finish_date: '',
-  intership: '',
+  start_date_school: '',
+  finish_date_school: '',
+  internship: '',
   start_date_internship: '',
   finish_date_internship: '',
   social_service: '',
@@ -39,7 +39,7 @@ const professionalInfo = {
   finish_date_social: '',
   exam_date: '',
   exam_type: '',
-  tesis: '',
+  thesis: '',
   professional_id: '',
   professional_id_date: '',
   book: '',
@@ -47,24 +47,12 @@ const professionalInfo = {
 }
 
 export default function Profesional(props) {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   const [inputs, setInputs] = useState(professionalInfo);
 
   useEffect(() => {
-    axios.get(baseUrl + props.userId + '/professional').then(response => {
-      const professionalData = Object.assign({}, response.data.professional);
-      delete professionalData['id'];
-      delete professionalData['Users_id'];
-      professionalData['endpoint'] = '/professional';
-
-      const dates = ['start_date', 'finish_date', 'start_date_internship', 'finish_date_internship', 'start_date_social', 'finish_date_social', 'exam_date', 'professional_id_date']
-      dates.forEach(date => {
-        professionalData[date] = professionalData[date].slice(0, 10);
-      });
-
-      setInputs(professionalData);
-    });
+    setInputs(props.userData);
   }, [props.userId]);
 
   useEffect(() => {
@@ -80,11 +68,11 @@ export default function Profesional(props) {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
+      <div >
         <Typography component="h1" variant="h5">
           Licenciatura
         </Typography>
-        <form className={classes.form} noValidate onChange={handleChange}>
+        <form noValidate onChange={handleChange}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -100,39 +88,39 @@ export default function Profesional(props) {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                value={inputs.start_date}
+                value={inputs.start_date_school}
                 variant="outlined"
                 required
                 fullWidth
-                name="start_date"
+                name="start_date_school"
                 label="Fecha de Inicio"
                 type="date"
-                id="start_date"
+                id="start_date_school"
                 InputLabelProps={{shrink: true}}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                value={inputs.finish_date}
+                value={inputs.finish_date_school}
                 variant="outlined"
                 required
                 fullWidth
-                name="finish_date"
+                name="finish_date_school"
                 label="Fecha de Terminación"
                 type="date"
-                id="finish_date"
+                id="finish_date_school"
                 InputLabelProps={{shrink: true}}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                value={inputs.intership}
+                value={inputs.internship}
                 variant="outlined"
                 required
                 fullWidth
-                id="intership"
+                id="internship"
                 label="Sitio donde realizó el internado"
-                name="intership"
+                name="internship"
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -224,12 +212,12 @@ export default function Profesional(props) {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                value={inputs.tesis}
+                value={inputs.thesis}
                 variant="outlined"
                 fullWidth
-                name="tesis"
+                name="thesis"
                 label="Título de la Tesis Recepcional"
-                id="tesis"
+                id="thesis"
               />
             </Grid>
             <Grid item xs={12}>

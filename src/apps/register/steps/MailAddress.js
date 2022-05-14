@@ -1,46 +1,46 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { FormControlLabel, Checkbox, Select, FormControl, InputLabel, Container, Typography, Grid, TextField, CssBaseline } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { FormControlLabel, Checkbox, Select, FormControl, InputLabel, Container, Typography, Grid, TextField, CssBaseline } from '@mui/material';
+// import { makeStyles } from '@material-ui/core/styles';
 import { apiUrl } from '../../../apiUrl';
 
 const baseUrl = apiUrl + 'register/';
 
-const useStyles = makeStyles(theme => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+// const useStyles = makeStyles(theme => ({
+//   paper: {
+//     marginTop: theme.spacing(8),
+//     display: 'flex',
+//     flexDirection: 'column',
+//     alignItems: 'center',
+//   },
+//   avatar: {
+//     margin: theme.spacing(1),
+//     backgroundColor: theme.palette.secondary.main,
+//   },
+//   form: {
+//     width: '100%', // Fix IE 11 issue.
+//     marginTop: theme.spacing(3),
+//   },
+//   submit: {
+//     margin: theme.spacing(3, 0, 2),
+//   },
+// }));
 
 const addressInfo = {
-  endpoint: '/mail',
-  street: '',
-  number: '',
-  town: '',
-  city: '',
-  state: '',
-  zip_code: '',
-  phone: ''
+  mail_street: '',
+  mail_number: '',
+  mail_town: '',
+  mail_city: '',
+  mail_state: '',
+  mail_zip_code: '',
+  mail_phone: ''
 }
 
 export default function MailAddress(props) {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   const [inputs, setInputs] = useState(addressInfo);
+  const [localInputs, setLocalInputs] = useState({})
   const inputLabel = useRef(null);
   const [labelWidth, setLabelWidth] = useState(0);
   useEffect(() => {
@@ -48,33 +48,25 @@ export default function MailAddress(props) {
   }, []);
 
   useEffect(() => {
-    axios.get(baseUrl + props.userId + '/mail').then(response => {
-      const addressData = Object.assign({}, response.data.mail);
-      delete addressData['id'];
-      delete addressData['Users_id'];
-      addressData['endpoint'] = '/mail';
-
-      setInputs(addressData);
-    });
+    setInputs(props.userData);
   }, [props.userId]);
 
   useEffect(() => {
     props.handleUpdate(inputs);
-  }, [inputs]);
+  }, [inputs, localInputs]);
 
   function handleChange(e) {
     e.preventDefault();
 
     if (e.target.name === 'same-address') {
       if (e.target.checked) {
-        axios.get(baseUrl + props.userId + '/address').then(response => {
-          const addressData = Object.assign({}, response.data.address);
-          delete addressData['id'];
-          delete addressData['Users_id'];
-          addressData['endpoint'] = '/mail';
-
-          setInputs(addressData);
-        });
+        const userdata = inputs;
+        Object.keys(addressInfo).forEach(key => {
+          userdata[key] = userdata[key.substring(5)]
+        })
+        setLocalInputs(userdata)
+        
+        setInputs(userdata)
       }
     } else {
       setInputs({...inputs, [e.target.name]:e.target.value});
@@ -84,11 +76,11 @@ export default function MailAddress(props) {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
+      <div >
         <Typography component="h1" variant="h5">
           Domicilio para correspondencia
         </Typography>
-        <form className={classes.form} noValidate onChange={handleChange}>
+        <form noValidate onChange={handleChange}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <FormControlLabel
@@ -103,62 +95,62 @@ export default function MailAddress(props) {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                value={inputs.street}
-                name="street"
+                value={inputs.mail_street}
+                name="mail_street"
                 variant="outlined"
                 required
                 fullWidth
-                id="street"
+                id="mail_street"
                 label="Calle"
                 autoFocus
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                value={inputs.number}
+                value={inputs.mail_number}
                 variant="outlined"
                 required
                 fullWidth
-                id="number"
+                id="mail_number"
                 label="Número Ext./Int."
-                name="number"
+                name="mail_number"
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                value={inputs.town}
+                value={inputs.mail_town}
                 variant="outlined"
                 required
                 fullWidth
-                id="town"
+                id="mail_town"
                 label="Colonia"
-                name="town"
+                name="mail_town"
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                value={inputs.city}
+                value={inputs.mail_city}
                 variant="outlined"
                 required
                 fullWidth
-                name="city"
+                name="mail_city"
                 label="Ciudad"
-                id="city"
+                id="mail_city"
               />
             </Grid>
             <Grid item xs={12}>
-              <FormControl fullWidth variant="outlined" className={classes.formControl}>
+              <FormControl fullWidth variant="outlined">
                 <InputLabel ref={inputLabel} htmlFor="outlined-age-native-simple">
                   Estado
                 </InputLabel>
                 <Select
 
                   native
-                  value={inputs.state}
+                  value={inputs.mail_state}
                   labelWidth={labelWidth}
                   inputProps={{
-                    name: 'state',
-                    id: 'state',
+                    name: 'mail_state',
+                    id: 'mail_state',
                   }}
                 >
                   <option value="no">Seleccione uno...</option>
@@ -199,24 +191,24 @@ export default function MailAddress(props) {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                value={inputs.zip_code}
+                value={inputs.mail_zip_code}
                 variant="outlined"
                 required
                 fullWidth
-                name="zip_code"
+                name="mail_zip_code"
                 label="Código Postal"
-                id="zip_code"
+                id="mail_zip_code"
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                value={inputs.phone}
+                value={inputs.mail_phone}
                 variant="outlined"
                 required
                 fullWidth
-                name="phone"
+                name="mail_phone"
                 label="Número telefónico"
-                id="phone"
+                id="mail_phone"
               />
             </Grid>
 
