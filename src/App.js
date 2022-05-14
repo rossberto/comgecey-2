@@ -37,14 +37,3 @@ function App() {
 }
 
 export default App;
-
-    // <ThemeProvider theme={theme}>
-    //   {/* <Router history={history}> */}
-    //    <Routes>
-    //     <Route path='/user/:userId' component={InscriptionForm} />
-    //     <Route path='/registro' element={<Apply />} /> 
-    //     <Route path='/' element={<Home />} />
-    //     {/* <Navigate to='/' /> */}
-    //    </Routes>
-    //  {/* </Router> */}
-    // </ThemeProvider>

@@ -47,12 +47,6 @@ export default function ParticularAddress(props) {
   }, []);
 
   useEffect(() => {
-    // console.log(props.userData)
-    // ['street', 'number', 'town', 'city', 'state', 'zip_code', 'phone'].forEach(att => {
-    //       if (!props.userData.hasOwnProperty(att)) {
-    //         props.userData[att] = '';
-    //       }
-    //     });
     setInputs(props.userData);
   }, [props.userId]);
 
