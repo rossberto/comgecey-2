@@ -1,30 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { InputLabel, Select, FormControl, Container, Typography, Grid, TextField, CssBaseline } from '@mui/material';
-// import { makeStyles } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { apiUrl } from '../../../apiUrl';
 
 const baseUrl = apiUrl + 'register/';
 
-// const useStyles = makeStyles(theme => ({
-//   paper: {
-//     marginTop: theme.spacing(8),
-//     display: 'flex',
-//     flexDirection: 'column',
-//     alignItems: 'center',
-//   },
-//   avatar: {
-//     margin: theme.spacing(1),
-//     backgroundColor: theme.palette.secondary.main,
-//   },
-//   form: {
-//     width: '100%', // Fix IE 11 issue.
-//     marginTop: theme.spacing(3),
-//   },
-//   submit: {
-//     margin: '15px auto',
-//     justify: 'center'
-//   },
-// }));
+const theme = createTheme()
 
 const idInfo = {
   name: '',
@@ -36,8 +17,6 @@ const idInfo = {
 }
 
 export default function IdCard(props) {
-  // const classes = useStyles();
-
   const [inputs, setInputs] = useState(idInfo);
   const inputLabel = useRef(null);
   const [labelWidth, setLabelWidth] = useState(0);
@@ -89,11 +68,21 @@ export default function IdCard(props) {
   return (
     <Container component="main" maxWidth="xs">
       {<CssBaseline />}
-      <div>
+      <div style={{
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'}}
+      >
         <Typography component="h1" variant="h5">
           Ficha de identificación
         </Typography>
-        <form noValidate onChange={handleChange}>
+        <form noValidate onChange={handleChange}
+          style={{
+            width: '100%', // Fix IE 11 issue.
+            marginTop: theme.spacing(3)}
+          }
+        >
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField

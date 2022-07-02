@@ -1,30 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { Select, FormControl, InputLabel, Container, Typography, Grid, TextField, CssBaseline } from '@mui/material';
-// import { makeStyles } from '@material-ui/core/styles';
 import { apiUrl } from '../../../apiUrl';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const baseUrl = apiUrl + 'register/';
-
-// const useStyles = makeStyles(theme => ({
-//   paper: {
-//     marginTop: theme.spacing(8),
-//     display: 'flex',
-//     flexDirection: 'column',
-//     alignItems: 'center',
-//   },
-//   avatar: {
-//     margin: theme.spacing(1),
-//     backgroundColor: theme.palette.secondary.main,
-//   },
-//   form: {
-//     width: '100%', // Fix IE 11 issue.
-//     marginTop: theme.spacing(3),
-//   },
-//   submit: {
-//     margin: theme.spacing(3, 0, 2),
-//   },
-// }));
 
 const addressInfo = {
   street: '',
@@ -36,9 +16,9 @@ const addressInfo = {
   phone: ''
 }
 
-export default function ParticularAddress(props) {
-  // const classes = useStyles();
+const theme = createTheme()
 
+export default function ParticularAddress(props) {
   const [inputs, setInputs] = useState(addressInfo);
   const inputLabel = useRef(null);
   const [labelWidth, setLabelWidth] = useState(0);
@@ -63,11 +43,21 @@ export default function ParticularAddress(props) {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div >
+      <div style={{
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'}}
+      >
         <Typography component="h1" variant="h5">
           Domicilio particular
         </Typography>
-        <form noValidate onChange={handleChange}>
+        <form noValidate onChange={handleChange}
+          style={{
+            width: '100%', // Fix IE 11 issue.
+            marginTop: theme.spacing(3)}
+          }
+        >
           <Grid container spacing={2}>
             <Grid item xs={12} sm={8}>
               <TextField

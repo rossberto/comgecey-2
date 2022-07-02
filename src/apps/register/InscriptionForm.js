@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {useParams} from 'react-router-dom';
 import axios from 'axios';
-import { makeStyles, createMuiTheme, ThemeProvider } from '@mui/material/styles';
+// import { makeStyles, createMuiTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 import {Stepper, Step, StepLabel, Button, Typography, Grid, Container} from '@mui/material';
 import IdCard from './steps/IdCard';
 import ParticularAddress from './steps/ParticularAddress';
@@ -12,42 +14,30 @@ import { apiUrl } from '../../apiUrl';
 
 const baseUrl = apiUrl + 'register/';
 
-// const theme = createMuiTheme({
-//   palette: {
-//     primary: {
-//       // light: will be calculated from palette.primary.main,
-//       main: '#111f22',
-//       // dark: will be calculated from palette.primary.main,
-//       // contrastText: will be calculated to contrast with palette.primary.main
-//     },
-//     secondary: {
-//       light: '#0066ff',
-//       main: '#0044ff',
-//       // dark: will be calculated from palette.secondary.main,
-//       contrastText: '#ffcc00',
-//     },
-//     // Used by `getContrastText()` to maximize the contrast between
-//     // the background and the text.
-//     contrastThreshold: 3,
-//     // Used by the functions below to shift a color's luminance by approximately
-//     // two indexes within its tonal palette.
-//     // E.g., shift from Red 500 to Red 300 or Red 700.
-//     tonalOffset: 0.2,
-//   },
-// });
+const theme = createTheme({
+  palette: {
+    primary: {
+      // light: will be calculated from palette.primary.main,
+      main: '#111f22',
+      // dark: will be calculated from palette.primary.main,
+      // contrastText: will be calculated to contrast with palette.primary.main
+    },
+    secondary: {
+      light: '#0066ff',
+      main: '#0044ff',
+      // dark: will be calculated from palette.secondary.main,
+      contrastText: '#ffcc00',
+    },
+    // Used by `getContrastText()` to maximize the contrast between
+    // the background and the text.
+    contrastThreshold: 3,
+    // Used by the functions below to shift a color's luminance by approximately
+    // two indexes within its tonal palette.
+    // E.g., shift from Red 500 to Red 300 or Red 700.
+    tonalOffset: 0.2,
+  },
+});
 
-// const useStyles = makeStyles(theme => ({
-//   root: {
-//     width: '100%',
-//   },
-//   button: {
-//     marginRight: theme.spacing(1),
-//   },
-//   instructions: {
-//     marginTop: theme.spacing(1),
-//     marginBottom: theme.spacing(1),
-//   },
-// }));
 
 const expected_data = {
   1: ['name', 'father_lname', 'mother_lname', 'birthdate', 'birth_state', 'birth_city'],
@@ -153,12 +143,14 @@ export default function InscriptionForm(props) {
         })
       } else {
         setActiveStep(prevActiveStep => prevActiveStep + 1);
+        // if (activeStep === 2)
       }
     });
   };
 
   const handleBack = () => {
     setActiveStep(prevActiveStep => prevActiveStep - 1);
+    setData({...data, confirmed: 0});
   };
 
   const handleReset = () => {
@@ -178,8 +170,12 @@ export default function InscriptionForm(props) {
 
     if (notEmpty && notNull && values.length > 0) {
       setSubmitDisabled(false);
+      if (activeStep === 3) {
+        setData({...data, confirmed: 1});
+      }
     } else {
       setSubmitDisabled(true);
+      setData({...data, confirmed: 0});
     }
   }
 
@@ -192,8 +188,9 @@ export default function InscriptionForm(props) {
   }
 
   return (
-      <div >
-        <div>
+      <ThemeProvider theme={theme} >
+      <CssBaseline />
+        <div style={{margin:"20px"}}>
           <Stepper activeStep={activeStep}>
             {steps.map((label, index) => {
               const stepProps = {};
@@ -210,7 +207,8 @@ export default function InscriptionForm(props) {
             {activeStep === steps.length ? (
               <Container>
                 <Typography variant="h4" gutterBottom>Instrucciones</Typography>
-                <Typography>
+                <Typography 
+                  sx={{marginTop: theme.spacing(1), marginBottom: theme.spacing(1)}}>
                   1. Revisa que todos los datos se hayan ingresado correctamente.
                 </Typography>
 
@@ -218,22 +216,28 @@ export default function InscriptionForm(props) {
                 <iframe src={formPath} width="100%" height="500px"></iframe>
                 <br />
 
-                <Typography>
+                <Typography
+                  sx={{marginTop: theme.spacing(1), marginBottom: theme.spacing(1)}}>
                   2. Si necesitas corregir algo presiona el botón REINICIAR.
                 </Typography>
-                <Typography>
+                <Typography
+                  sx={{marginTop: theme.spacing(1), marginBottom: theme.spacing(1)}}>
                   3. Si todo está correcto, descarga el formato. Más adelante deberás imprimirlo, firmarlo y escanearlo para subirlo a la plataforma.
                 </Typography>
-                <Typography>
+                <Typography
+                  sx={{marginTop: theme.spacing(1), marginBottom: theme.spacing(1)}}>
                   4. Haz clic en FINALIZAR.
                 </Typography>
 
                 <div align="center">
 
-                  <Button onClick={handleReset}>
+                  <Button onClick={handleReset} sx={{marginRight: theme.spacing(1)}}>
                     Reiniciar
                   </Button>
-                  <Button onClick={handleFinish} href="http://app.comgecey.org/signin" >
+                  <Button onClick={handleFinish} 
+                    href="http://app.comgecey.org/signin" 
+                    sx={{marginRight: theme.spacing(1)}}
+                  >
                     Finalizar
                   </Button>
                 </div>
@@ -242,9 +246,11 @@ export default function InscriptionForm(props) {
               <div>
                 <Typography variant={'inherit'}>{getStepContent(activeStep)}</Typography>
                 <br />
-                <Grid container direction="row" justify="center">
+                <Grid container direction="row" justifyContent="center">
                   <Grid item>
-                  <Button disabled={activeStep === 0} onClick={handleBack} >
+                  <Button disabled={activeStep === 0} onClick={handleBack} 
+                    sx={{marginRight: theme.spacing(1)}}
+                  >
                     Regresar
                   </Button>
 
@@ -253,6 +259,7 @@ export default function InscriptionForm(props) {
                     variant="contained"
                     color="primary"
                     onClick={handleNext}
+                    sx={{marginRight: theme.spacing(1)}}
                     
                   >
                     {activeStep === steps.length - 1 ? 'Revisar' : 'Siguiente'}
@@ -263,6 +270,6 @@ export default function InscriptionForm(props) {
             )}
           </div>
         </div>
-      </div>
+      </ThemeProvider>
   );
 }
